@@ -1,0 +1,152 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STUDENTS 100
+
+// Structure to store student information
+struct Student {
+    int id;
+    char name[50];
+    float marks[5]; // Assuming 5 subjects
+    float average;
+};
+
+struct Student students[MAX_STUDENTS];
+int studentCount = 0;
+
+void addStudent() {
+    if (studentCount >= MAX_STUDENTS) {
+        printf("Cannot add more students.\n");
+        return;
+    }
+
+    printf("Enter Student ID: ");
+    scanf("%d", &students[studentCount].id);
+
+    printf("Enter Student Name: ");
+    scanf("%s", students[studentCount].name);
+
+    printf("Enter marks for 5 subjects: \n");
+    float totalMarks = 0.0;
+    for (int i = 0; i < 5; i++) {
+        printf("Subject %d: ", i + 1);
+        scanf("%f", &students[studentCount].marks[i]);
+        totalMarks += students[studentCount].marks[i];
+    }
+    students[studentCount].average = totalMarks / 5.0;
+
+    studentCount++;
+    printf("Student added successfully.\n");
+}
+
+void editStudent() {
+    int id, found = -1;
+    printf("Enter Student ID to edit: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < studentCount; i++) {
+        if (students[i].id == id) {
+            found = i;
+            break;
+        }
+    }
+
+    if (found == -1) {
+        printf("Student not found.\n");
+        return;
+    }
+
+    printf("Enter new Student Name: ");
+    scanf("%s", students[found].name);
+
+    printf("Enter new marks for 5 subjects: \n");
+    float totalMarks = 0.0;
+    for (int i = 0; i < 5; i++) {
+        printf("Subject %d: ", i + 1);
+        scanf("%f", &students[found].marks[i]);
+        totalMarks += students[found].marks[i];
+    }
+    students[found].average = totalMarks / 5.0;
+
+    printf("Student record updated successfully.\n");
+}
+
+void deleteStudent() {
+    int id, found = -1;
+    printf("Enter Student ID to delete: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < studentCount; i++) {
+        if (students[i].id == id) {
+            found = i;
+            break;
+        }
+    }
+
+    if (found == -1) {
+        printf("Student not found.\n");
+        return;
+    }
+
+    for (int i = found; i < studentCount - 1; i++) {
+        students[i] = students[i + 1];
+    }
+
+    studentCount--;
+    printf("Student deleted successfully.\n");
+}
+
+void viewStudents() {
+    if (studentCount == 0) {
+        printf("No students to display.\n");
+        return;
+    }
+
+    for (int i = 0; i < studentCount; i++) {
+        printf("Student ID: %d\n", students[i].id);
+        printf("Student Name: %s\n", students[i].name);
+        printf("Marks: ");
+        for (int j = 0; j < 5; j++) {
+            printf("%.2f ", students[i].marks[j]);
+        }
+        printf("\nAverage: %.2f\n", students[i].average);
+        printf("---------------------\n");
+    }
+}
+
+int main() {
+    int choice;
+
+    do {
+        printf("\nStudent Management System\n");
+        printf("1. Add Student\n");
+        printf("2. Edit Student\n");
+        printf("3. Delete Student\n");
+        printf("4. View All Students\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addStudent();
+                break;
+            case 2:
+                editStudent();
+                break;
+            case 3:
+                deleteStudent();
+                break;
+            case 4:
+                viewStudents();
+                break;
+            case 5:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
